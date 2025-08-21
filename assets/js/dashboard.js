@@ -39,16 +39,18 @@ document.getElementById("url").addEventListener("keyup", (e) => {
     chrome.storage.local.get("dorks", (result) => {
       const dorks = result["dorks"] || [];
       dorks.forEach(dork => {
-          let value = dork.replace("site:site.com", `site:${e.target.value}`)
-          let span = document.createElement("span")
-          span.classList.add("dorks")
-          span.innerText = value
-          let encodedValue = encodeURIComponent(value)
-          resultBox.append(span)
-          span.appendChild(anchor_maker("GOOGLE", `https://google.com/search?q=${encodedValue}`))
-          span.appendChild(anchor_maker("BING", `https://bing.com/search?q=${encodedValue}`))
-          span.appendChild(anchor_maker("YANDEX", `https://yandex.com/search/?text=${encodedValue}`))
-          span.appendChild(anchor_maker("YAHOO", `https://search.yahoo.com/search?p=${encodedValue}`))
+        let value = dork.replace("site:site.com", `site:${e.target.value}`)
+        let span = document.createElement("span")
+        span.classList.add("dorks")
+        span.innerText = value
+        let encodedValue = encodeURIComponent(value)
+        resultBox.append(span)
+        chrome.storage.local.get("anchors", (result) => {
+            const anchors = result["anchors"] || {};
+            Object.keys(anchors).forEach(key => {
+                span.appendChild(anchor_maker(key, anchors[key].replace("{QUERY}", encodedValue)))
+            })
+        })
       })
     })
 })

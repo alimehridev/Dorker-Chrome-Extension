@@ -47,4 +47,12 @@ chrome.runtime.onInstalled.addListener(() => {
 
   chrome.storage.local.set({"dorks": dorks}, () => {
   });
+  let anchors = {
+    "GOOGLE": "https://google.com/search?q={QUERY}",
+    "BING": "https://bing.com/search?q={QUERY}",
+    "YANDEX": "https://yandex.com/search/?text={QUERY}",
+    "YAHOO": "https://search.yahoo.com/search?p={QUERY}",
+  }
+  chrome.storage.local.set({"anchors": anchors}, () => {
+  });
 });
