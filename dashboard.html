@@ -92,6 +92,20 @@
         <button id="add_new_dork_button">Add</button>
       </div>
     </div>
+
+    <div id="editDorksModal" class="modal">
+      <div class="modal-content">
+        <span id="closeEditDorksModal" class="close-btn">&times;</span>
+        <input type="hidden" name="last_value" id="last_value">
+        <h2 style="margin-top: 10px;">Edit dork</h2>
+        <label style="margin-top: 10px;">
+          <span>Edit to:</span>
+          <input type="text" id="dork_new_value" placeholder="site:site.com ..." />
+        </label>
+        <span id="wrong_dork_warning_edit">Your dork should contain 'site:site.com' to work correctly</span>
+        <button id="edit_dork_button">Edit</button>
+      </div>
+    </div>
     <script src="assets/js/modal.js"></script>
     <script src="assets/js/dashboard.js"></script>
   </body>

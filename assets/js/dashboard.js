@@ -12,13 +12,22 @@ function anchor_maker(text, url){
     return anchor
 }
 
+function edit_dork(dork){
+    document.getElementById("editDorksModal").style.display = "block";
+    document.getElementById("dork_new_value").value = dork
+    document.getElementById("dork_new_value").style.border = "1px solid #ccc"
+    document.getElementById("wrong_dork_warning_edit").style.display = "none"
+    document.getElementById("last_value").value = dork
+}
+
 
 if(getQueryParam("url")){
     document.getElementById("url").value = getQueryParam("url")
     let resultBox = document.getElementById("resultBox")
     resultBox.innerHTML = ""
     chrome.storage.local.get("dorks", (result) => {
-      const dorks = result["dorks"] || [];
+      let dorks = result["dorks"] || [];
+      dorks.reverse()
       dorks.forEach(dork => {
         let value = dork.replace("site:site.com", `site:${getQueryParam("url")}`)
         let span = document.createElement("span")
@@ -30,6 +39,13 @@ if(getQueryParam("url")){
             const anchors = result["anchors"] || {};
             Object.keys(anchors).forEach(key => {
                 span.appendChild(anchor_maker(key, anchors[key].replace("{QUERY}", encodedValue)))
+            })
+            let edit_span = document.createElement("span")
+            edit_span.classList.add("edit_dork_button")
+            edit_span.innerText = "EDIT"
+            span.appendChild(edit_span)
+            edit_span.addEventListener("click", () => {
+                edit_dork(dork)
             })
             let remove_span = document.createElement("span")
             remove_span.classList.add("remove_dork_button")
@@ -57,7 +73,8 @@ document.getElementById("url").addEventListener("keyup", (e) => {
     let resultBox = document.getElementById("resultBox")
     resultBox.innerHTML = ""
     chrome.storage.local.get("dorks", (result) => {
-      const dorks = result["dorks"] || [];
+      let dorks = result["dorks"] || [];
+      dorks.reverse()
       dorks.forEach(dork => {
         let value = dork.replace("site:site.com", `site:${e.target.value}`)
         let span = document.createElement("span")
@@ -69,6 +86,13 @@ document.getElementById("url").addEventListener("keyup", (e) => {
             const anchors = result["anchors"] || {};
             Object.keys(anchors).forEach(key => {
                 span.appendChild(anchor_maker(key, anchors[key].replace("{QUERY}", encodedValue)))
+            })
+            let edit_span = document.createElement("span")
+            edit_span.classList.add("edit_dork_button")
+            edit_span.innerText = "EDIT"
+            span.appendChild(edit_span)
+            edit_span.addEventListener("click", () => {
+                edit_dork(dork)
             })
             let remove_span = document.createElement("span")
             remove_span.classList.add("remove_dork_button")
