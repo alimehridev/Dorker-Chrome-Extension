@@ -3,43 +3,52 @@ function getQueryParam(param) {
   return urlParams.get(param);
 }
 
-document.getElementById("url").value = getQueryParam("url")
-
-let google_dorks = document.getElementsByClassName("google-dorks")[0].getElementsByClassName("dorks")
-for(let i = 0; i < google_dorks.length; i++){
-    let dork = google_dorks[i]
-    let content = dork.innerText.replace(dork.innerText.match(/site:.*?\s/), `site:${document.getElementById("url").value} `)
-    dork.innerText = content
-    dork.setAttribute("target", "_blank")
-    dork.setAttribute("href", `https://www.google.com/search?q=${encodeURIComponent(content)}`)
+function anchor_maker(text, url){
+    let anchor = document.createElement("a")
+    anchor.classList.add("anchor")
+    anchor.href = url
+    anchor.innerText = text
+    anchor.setAttribute("target", "_blank")
+    return anchor
 }
 
-let bing_dorks = document.getElementsByClassName("bing-dorks")[0].getElementsByClassName("dorks")
-for(let i = 0; i < bing_dorks.length; i++){
-    let dork = bing_dorks[i]
-    let content = dork.innerText.replace(dork.innerText.match(/site:.*?\s/), `site:${document.getElementById("url").value} `)
-    dork.innerText = content
-    dork.setAttribute("target", "_blank")
-    dork.setAttribute("href", `https://www.bing.com/search?q=${encodeURIComponent(content)}`)
-}
 
+if(getQueryParam("url")){
+    document.getElementById("url").value = getQueryParam("url")
+    let resultBox = document.getElementById("resultBox")
+    resultBox.innerHTML = ""
+    chrome.storage.local.get("dorks", (result) => {
+      const dorks = result["dorks"] || [];
+      dorks.forEach(dork => {
+          let value = dork.replace("site:site.com", `site:${getQueryParam("url")}`)
+          let span = document.createElement("span")
+          span.classList.add("dorks")
+          span.innerText = value
+          let encodedValue = encodeURIComponent(value)
+          resultBox.append(span)
+          span.appendChild(anchor_maker("GOOGLE", `https://google.com/search?q=${encodedValue}`))
+          span.appendChild(anchor_maker("BING", `https://bing.com/search?q=${encodedValue}`))
+          span.appendChild(anchor_maker("YANDEX", `https://yandex.com/search/?text=${encodedValue}`))
+          span.appendChild(anchor_maker("YAHOO", `https://search.yahoo.com/search?p=${encodedValue}`))
+      })
+    })
+}
 document.getElementById("url").addEventListener("keyup", (e) => {
-    let url = e.target.value
-    let google_dorks = document.getElementsByClassName("google-dorks")[0].getElementsByClassName("dorks")
-    for(let i = 0; i < google_dorks.length; i++){
-        let dork = google_dorks[i]
-        let content = dork.innerText.replace(dork.innerText.match(/site:.*?\s/), `site:${url} `)
-        dork.innerText = content
-        dork.setAttribute("target", "_blank")
-        dork.setAttribute("href", `https://www.google.com/search?q=${encodeURIComponent(content)}`)
-    }
-    
-    let bing_dorks = document.getElementsByClassName("bing-dorks")[0].getElementsByClassName("dorks")
-    for(let i = 0; i < bing_dorks.length; i++){
-        let dork = bing_dorks[i]
-        let content = dork.innerText.replace(dork.innerText.match(/site:.*?\s/), `site:${document.getElementById("url").value} `)
-        dork.innerText = content
-        dork.setAttribute("target", "_blank")
-        dork.setAttribute("href", `https://www.bing.com/search?q=${encodeURIComponent(content)}`)
-    }
+    let resultBox = document.getElementById("resultBox")
+    resultBox.innerHTML = ""
+    chrome.storage.local.get("dorks", (result) => {
+      const dorks = result["dorks"] || [];
+      dorks.forEach(dork => {
+          let value = dork.replace("site:site.com", `site:${e.target.value}`)
+          let span = document.createElement("span")
+          span.classList.add("dorks")
+          span.innerText = value
+          let encodedValue = encodeURIComponent(value)
+          resultBox.append(span)
+          span.appendChild(anchor_maker("GOOGLE", `https://google.com/search?q=${encodedValue}`))
+          span.appendChild(anchor_maker("BING", `https://bing.com/search?q=${encodedValue}`))
+          span.appendChild(anchor_maker("YANDEX", `https://yandex.com/search/?text=${encodedValue}`))
+          span.appendChild(anchor_maker("YAHOO", `https://search.yahoo.com/search?p=${encodedValue}`))
+      })
+    })
 })

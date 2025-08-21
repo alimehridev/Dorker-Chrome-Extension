@@ -3,7 +3,7 @@
   "name": "Dorker - Chrome Extension",
   "version": "1.0",
   "description": "A chrome extension to dorking urls",
-  "permissions": ["tabs"],
+  "permissions": ["storage", "tabs"],
   "host_permissions": ["<all_urls>"],
   "action": {
     "default_icon": {
