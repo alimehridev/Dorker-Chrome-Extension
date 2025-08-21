@@ -7,7 +7,6 @@
     <style>
       body {
         background-color: #f8f8f8;
-        color: #00bfff;
         margin: 0;
         min-height: 100vh;
         display: flex;
@@ -52,7 +51,13 @@
         background: #007fd3;
         color: white;
       }
+      .edit-button {
+        cursor: pointer;
+        text-decoration: underline;
+        padding: 4px 5px;
+      }
     </style>
+    <link rel="stylesheet" href="assets/styles/modal.css">
   </head>
   <body>
     <div class="container">
@@ -65,10 +70,28 @@
           placeholder="Enter something..."
         />
       </div>
+      <div>
+        <span class="edit-button" id="addDorksButton">Add new dork</span>
+        <span class="edit-button">Edit anchors</span>
+      </div>
       <div class="result-box" id="resultBox">
         
       </div>
     </div>
+
+    <div id="addDorksModal" class="modal">
+      <div class="modal-content">
+        <span id="closeAddDorksModal" class="close-btn">&times;</span>
+        <h2 style="margin-top: 10px;">Add new dork</h2>
+        <label style="margin-top: 10px;">
+          <span>Dork:</span>
+          <input type="text" id="dork_value" placeholder="site:site.com ..." />
+        </label>
+        <span id="wrong_dork_warning">Your dork should contain 'site:site.com' to work correctly</span>
+        <button id="add_new_dork_button">Add</button>
+      </div>
+    </div>
+    <script src="assets/js/modal.js"></script>
     <script src="assets/js/dashboard.js"></script>
   </body>
 </html>
