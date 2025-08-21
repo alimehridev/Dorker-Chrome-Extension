@@ -20,18 +20,38 @@ if(getQueryParam("url")){
     chrome.storage.local.get("dorks", (result) => {
       const dorks = result["dorks"] || [];
       dorks.forEach(dork => {
-          let value = dork.replace("site:site.com", `site:${getQueryParam("url")}`)
-          let span = document.createElement("span")
-          span.classList.add("dorks")
-          span.innerText = value
-          let encodedValue = encodeURIComponent(value)
-          resultBox.append(span)
-          span.appendChild(anchor_maker("GOOGLE", `https://google.com/search?q=${encodedValue}`))
-          span.appendChild(anchor_maker("BING", `https://bing.com/search?q=${encodedValue}`))
-          span.appendChild(anchor_maker("YANDEX", `https://yandex.com/search/?text=${encodedValue}`))
-          span.appendChild(anchor_maker("YAHOO", `https://search.yahoo.com/search?p=${encodedValue}`))
+        let value = dork.replace("site:site.com", `site:${getQueryParam("url")}`)
+        let span = document.createElement("span")
+        span.classList.add("dorks")
+        span.innerText = value
+        let encodedValue = encodeURIComponent(value)
+        resultBox.append(span)
+        chrome.storage.local.get("anchors", (result) => {
+            const anchors = result["anchors"] || {};
+            Object.keys(anchors).forEach(key => {
+                span.appendChild(anchor_maker(key, anchors[key].replace("{QUERY}", encodedValue)))
+            })
+            let remove_span = document.createElement("span")
+            remove_span.classList.add("remove_dork_button")
+            remove_span.innerText = "X"
+            span.appendChild(remove_span)
+            remove_span.addEventListener("click", () => {
+                remove_dork(dork)
+            })
+        })
       })
     })
+}
+function remove_dork(value){
+    let confirmation = confirm("Do you want to remove this dork ?")
+    if(confirmation){
+        chrome.storage.local.get("dorks", (result) => {
+            let dorks = result["dorks"] || [];
+            chrome.storage.local.set({"dorks": dorks.filter(item => item !== value)}, () => {});
+
+            location.reload()
+        })
+    }
 }
 document.getElementById("url").addEventListener("keyup", (e) => {
     let resultBox = document.getElementById("resultBox")
@@ -49,6 +69,13 @@ document.getElementById("url").addEventListener("keyup", (e) => {
             const anchors = result["anchors"] || {};
             Object.keys(anchors).forEach(key => {
                 span.appendChild(anchor_maker(key, anchors[key].replace("{QUERY}", encodedValue)))
+            })
+            let remove_span = document.createElement("span")
+            remove_span.classList.add("remove_dork_button")
+            remove_span.innerText = "X"
+            span.appendChild(remove_span)
+            remove_span.addEventListener("click", () => {
+                remove_dork(dork)
             })
         })
       })

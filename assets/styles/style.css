@@ -3,3 +3,21 @@
     margin: 0;
     box-sizing: border-box;
 }
+.dorks:hover {
+    background-color: rgb(255, 231, 231);
+}
+.remove_dork_button {
+    padding-left: 7px;
+    padding-right: 7px;
+    text-decoration: none;
+    background: #ff0000;
+    border-radius: 5px;
+    margin-right: 2.5px;
+    margin-left: 2.5px;
+    color: white;
+    cursor: pointer;
+}
+.remove_dork_button:hover {
+    background: #9c0000;
+
+}
