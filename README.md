@@ -24,7 +24,6 @@ Dorker is a Chrome extension that generates dorks from the current URL using var
 
 ## Screenshots
 
-*Add screenshots or GIFs here*
 ![Dorker Screenshot](assets/images/screenshot.png)
 
 
