@@ -110,7 +110,12 @@
     <div id="searchEngineModal" class="modal">
       <div class="modal-content">
         <span id="closeSearchEngineModal" class="close-btn">&times;</span>
-        <h2 style="margin-top: 10px;">Add new search engine</h2>
+        <div id="headofheader">
+          <h2 style="margin-top: 10px;" id="header">Add new search engine</h2>
+        </div>
+        <input type="hidden" id="old_se_label" />
+        <input type="hidden" id="old_se_url" />
+
         <label style="margin-top: 5px;">
           <span>Label:</span>
           <input type="text" id="add_se_label" placeholder="GOOGLE, BING, ..." />

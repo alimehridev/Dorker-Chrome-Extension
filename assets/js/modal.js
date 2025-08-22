@@ -83,9 +83,31 @@ document.getElementById("edit_dork_button").addEventListener("click", () => {
         }
     }
 })
-
+function disable_edit_mode(el){
+    document.getElementById("old_se_label").value = ""
+    document.getElementById("old_se_url").value = ""
+    document.getElementById("add_se_label").value = ""
+    document.getElementById("add_se_url").value = ""
+    document.getElementById("header").innerText = "Add new search engine"
+    document.getElementById("new_search_engine_button").innerText = "Add"
+    el.target.remove()
+}
 function edit_search_engine(url, label){
-    alert(url, label)
+    document.getElementById("header").innerText = "Edit search engine"
+    let exit_edit_mode_button = document.createElement("span")
+    exit_edit_mode_button.innerText = "x"
+    exit_edit_mode_button.classList.add("disable_edit_model_btn")
+    exit_edit_mode_button.setAttribute("title", "disable edit mode")
+    exit_edit_mode_button.addEventListener("click", (el) => {
+        disable_edit_mode(el)
+    })
+    document.getElementById("headofheader").appendChild(exit_edit_mode_button)
+    document.getElementById("old_se_label").value = label
+    document.getElementById("old_se_url").value = url    
+    document.getElementById("add_se_label").value = label
+    document.getElementById("add_se_url").value = url
+    document.getElementById("new_search_engine_button").innerText = "Edit"
+    document.getElementById("add_se_label").value.focus()
 }
 function remove_search_engine(url, label){
     let confirmation = confirm("Are you sure ?")
@@ -103,7 +125,12 @@ function remove_search_engine(url, label){
 document.getElementById("searchEngineButton").addEventListener("click", () => {
     document.getElementById("add_se_label").value = ""
     document.getElementById("add_se_url").value = ""
+    document.getElementById("header").innerText = "Add new search engine"
+    document.getElementById("new_search_engine_button").innerText = "Add"
     document.getElementById("searchEngineModal").style.display = "block";
+    if(document.getElementsByClassName("disable_edit_model_btn")[0]){
+        document.getElementsByClassName("disable_edit_model_btn")[0].remove()
+    }
     document.getElementById("add_se_label").focus()
 
     let search_engines = document.getElementById("search_engines")
@@ -205,13 +232,27 @@ document.getElementById("add_se_label").addEventListener("keyup", (e) => {
     check_se_values(url, label)    
 })
 
-document.getElementById("new_search_engine_button").addEventListener("click", () => {
-    let label = document.getElementById("add_se_label").value
-    let url = document.getElementById("add_se_url").value
-    if(check_se_values(url, label)){
+document.getElementById("new_search_engine_button").addEventListener("click", (e) => {
+    if(e.target.innerText === "Add"){
+        let label = document.getElementById("add_se_label").value
+        let url = document.getElementById("add_se_url").value
+        if(check_se_values(url, label)){
+            chrome.storage.local.get("anchors", (result) => {
+                let anchors = result["anchors"] || {};
+                anchors[label] = url
+                chrome.storage.local.set({"anchors": anchors}, () => {
+                    location.reload()
+                });
+            })
+        }
+    }else {
+        let old_se_label = document.getElementById("old_se_label").value
+        let new_se_label = document.getElementById("add_se_label").value
+        let new_se_url = document.getElementById("add_se_url").value
         chrome.storage.local.get("anchors", (result) => {
             let anchors = result["anchors"] || {};
-            anchors[label] = url
+            delete anchors[old_se_label]
+            anchors[new_se_label] = new_se_url
             chrome.storage.local.set({"anchors": anchors}, () => {
                 location.reload()
             });

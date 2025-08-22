@@ -94,3 +94,20 @@
 #search_engines .se .se_buttons .se_edit:hover {
     background: #1a7000;
 }
+
+#headofheader {
+    display: flex;
+    align-items: center;
+}
+#headofheader span {
+    background-color: #dedede;
+    border-radius: 5px;
+    padding: 1px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-top: 10px;
+    height: 20px;
+    width: 20px;
+    text-align: center;
+    margin-left: 5px;
+}
