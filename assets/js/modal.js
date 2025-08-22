@@ -249,14 +249,16 @@ document.getElementById("new_search_engine_button").addEventListener("click", (e
         let old_se_label = document.getElementById("old_se_label").value
         let new_se_label = document.getElementById("add_se_label").value
         let new_se_url = document.getElementById("add_se_url").value
-        chrome.storage.local.get("anchors", (result) => {
-            let anchors = result["anchors"] || {};
-            delete anchors[old_se_label]
-            anchors[new_se_label] = new_se_url
-            chrome.storage.local.set({"anchors": anchors}, () => {
-                location.reload()
-            });
-        })
+        if(check_se_values(new_se_url, new_se_label)){
+            chrome.storage.local.get("anchors", (result) => {
+                let anchors = result["anchors"] || {};
+                delete anchors[old_se_label]
+                anchors[new_se_label] = new_se_url
+                chrome.storage.local.set({"anchors": anchors}, () => {
+                    location.reload()
+                });
+            })
+        }
     }
 })
 document.getElementById("closeSearchEngineModal").addEventListener("click", () => {
