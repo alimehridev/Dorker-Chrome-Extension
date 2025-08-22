@@ -34,5 +34,63 @@
 }
 .edit_dork_button:hover {
     background: #1a7000;
+}
 
+#search_engines {
+    margin-top: 5px;
+}
+#search_engines .se {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #dedede;
+}
+#search_engines .se:hover {
+    background-color: aliceblue;
+}
+#search_engines .se .se_label {
+    flex: 1;
+}
+#search_engines .se .se_buttons {
+    flex: 1;
+    display: flex;
+    justify-content: end;
+}
+#search_engines .se .se_url {
+    max-width: 200px;
+    min-width: 200px;
+}
+
+
+
+#search_engines .se .se_buttons .se_remove {
+    padding-left: 7px;
+    padding-right: 7px;
+    text-decoration: none;
+    background: #ff0000;
+    border-radius: 5px;
+    margin-right: 2.5px;
+    margin-left: 2.5px;
+    color: white;
+    cursor: pointer;
+    height: 16px;
+}
+#search_engines .se .se_buttons .se_remove:hover {
+    background: #9c0000;
+
+}
+#search_engines .se .se_buttons .se_edit {
+    padding-left: 7px;
+    padding-right: 7px;
+    text-decoration: none;
+    background: #2cbe00;
+    border-radius: 5px;
+    margin-right: 2.5px;
+    margin-left: 2.5px;
+    color: white;
+    cursor: pointer;
+    height: 16px;
+}
+#search_engines .se .se_buttons .se_edit:hover {
+    background: #1a7000;
 }

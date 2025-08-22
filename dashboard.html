@@ -73,7 +73,7 @@
       </div>
       <div>
         <span class="edit-button" id="addDorksButton">Add new dork</span>
-        <span class="edit-button">Edit anchors</span>
+        <span class="edit-button" id="searchEngineButton">Search Engines</span>
       </div>
       <div class="result-box" id="resultBox">
         
@@ -104,6 +104,35 @@
         </label>
         <span id="wrong_dork_warning_edit">Your dork should contain 'site:site.com' to work correctly</span>
         <button id="edit_dork_button">Edit</button>
+      </div>
+    </div>
+
+    <div id="searchEngineModal" class="modal">
+      <div class="modal-content">
+        <span id="closeSearchEngineModal" class="close-btn">&times;</span>
+        <h2 style="margin-top: 10px;">Add new search engine</h2>
+        <label style="margin-top: 5px;">
+          <span>Label:</span>
+          <input type="text" id="add_se_label" placeholder="GOOGLE, BING, ..." />
+        </label>
+        <label style="margin-top: 5px;">
+          <span>URL:</span>
+          <input type="text" id="add_se_url" placeholder="https://google.com/search?q={QUERY}, ..." />
+        </label>
+        <span id="wrong_search_engine_warning"></span>
+        <button id="new_search_engine_button">Add</button>
+        <div style="border-bottom: 1px solid #bebebe; margin-top: 12px; margin-bottom: 5px"></div>
+        <h2 style="margin-top: 10px;">Search Engines</h2>
+        <div id="search_engines">
+          <div class="se">
+            <span class="se_url"><b>URL</b></span>
+            <span class="se_label"><b>LABEL</b></span>
+            <span>
+              <span class="se_edit"></span>
+              <span class="se_remove"></span>
+            </span>
+          </div>
+        </div>
       </div>
     </div>
     <script src="assets/js/modal.js"></script>

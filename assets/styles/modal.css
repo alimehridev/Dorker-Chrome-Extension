@@ -44,16 +44,17 @@
     border: 1px solid red;
     border-radius: 6px;
 }
-.modal-content #wrong_dork_warning, .modal-content #wrong_dork_warning_edit {
+.modal-content #wrong_dork_warning, .modal-content #wrong_dork_warning_edit, .modal-content #wrong_search_engine_warning {
     display: block;
+    margin-top: 3px;
     color: red;
     text-decoration: underline;
 }
 
-.modal-content #add_new_dork_button:hover, .modal-content #edit_dork_button:hover {
+.modal-content #add_new_dork_button:hover, .modal-content #edit_dork_button:hover, .modal-content #new_search_engine_button:hover {
     background-color: #005800;
 }
-.modal-content #add_new_dork_button, .modal-content #edit_dork_button {
+.modal-content #add_new_dork_button, .modal-content #edit_dork_button, .modal-content #new_search_engine_button {
     width: 100%;
     padding: 7px;
     margin-top: 5px;

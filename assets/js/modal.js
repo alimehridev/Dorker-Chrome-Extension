@@ -83,3 +83,141 @@ document.getElementById("edit_dork_button").addEventListener("click", () => {
         }
     }
 })
+
+function edit_search_engine(url, label){
+    alert(url, label)
+}
+function remove_search_engine(url, label){
+    let confirmation = confirm("Are you sure ?")
+    if(confirmation){
+        chrome.storage.local.get("anchors", (result) => {
+            let anchors = result["anchors"] || {};
+            delete anchors[label]
+            chrome.storage.local.set({"anchors": anchors}, () => {
+                location.reload()
+            });
+        })
+    }
+}
+
+document.getElementById("searchEngineButton").addEventListener("click", () => {
+    document.getElementById("add_se_label").value = ""
+    document.getElementById("add_se_url").value = ""
+    document.getElementById("searchEngineModal").style.display = "block";
+    document.getElementById("add_se_label").focus()
+
+    let search_engines = document.getElementById("search_engines")
+    search_engines.innerHTML = ""
+    let anchor_div = document.createElement("div")
+    anchor_div.classList.add("se")
+    anchor_div.innerHTML = `<span class="se_url"><b>URL</b></span>` +
+        `<span class="se_label"><b>LABEL</b></span>` +
+        '<span class="se_buttons">' + 
+        '</span>'
+    search_engines.appendChild(anchor_div)   
+    chrome.storage.local.get("anchors", (result) => {
+            let anchors = result["anchors"] || {};
+            Object.keys(anchors).forEach(label => {
+                url = anchors[label]
+                let anchor_div = document.createElement("div")
+                anchor_div.classList.add("se")
+                let se_url = document.createElement("span")
+                se_url.classList.add("se_url")
+                se_url.innerText = url
+                anchor_div.appendChild(se_url)
+                let se_label = document.createElement("span")
+                se_label.classList.add("se_label")
+                se_label.innerText = label
+                anchor_div.appendChild(se_label)
+            
+                let se_buttons = document.createElement("span")
+                se_buttons.classList.add("se_buttons")
+                let se_edit = document.createElement("span")
+                se_edit.classList.add("se_edit")
+                se_edit.innerText = "EDIT"
+                let se_remove = document.createElement("span")
+                se_remove.classList.add("se_remove")
+                se_remove.innerText = "X"
+                se_edit.addEventListener("click", (e) => {
+                    edit_search_engine(e.target.parentElement.parentElement.getElementsByClassName("se_url")[0].innerText
+, e.target.parentElement.parentElement.getElementsByClassName("se_label")[0].innerText
+)
+                })
+                se_remove.addEventListener("click", (e) => {
+                    remove_search_engine(e.target.parentElement.parentElement.getElementsByClassName("se_url")[0].innerText
+, e.target.parentElement.parentElement.getElementsByClassName("se_label")[0].innerText
+)
+                })
+                se_buttons.appendChild(se_edit)
+                se_buttons.appendChild(se_remove)
+                anchor_div.appendChild(se_buttons)
+                search_engines.appendChild(anchor_div)
+            })
+    })
+})
+function is_se_url_valid(value){
+    if(value.length == 0){
+        return [false, "URL can not be empty"]
+    }
+    if(!value.startsWith("https://")){
+        return [false, "URL should start with https://"]
+    }
+    if(!value.includes("{QUERY}")){
+        return [false, "URL should contain '{QUERY}' to work correctly"]
+    }
+    return [true]
+}
+function is_se_label_valid(value){
+    if(value.length == 0){
+        return [false, "Label can not be empty"]
+    }
+    return [true]
+}
+
+function check_se_values(url, label){
+    if(!is_se_label_valid(label)[0]){
+        document.getElementById("wrong_search_engine_warning").style.display = "block"
+        document.getElementById("wrong_search_engine_warning").innerText = is_se_label_valid(label)[1]
+        document.getElementById("add_se_label").style.border = "1px solid red"
+        return false
+    }
+    else if(!is_se_url_valid(url)[0]){
+        document.getElementById("wrong_search_engine_warning").style.display = "block"
+        document.getElementById("wrong_search_engine_warning").innerText = is_se_url_valid(url)[1]
+        document.getElementById("add_se_url").style.border = "1px solid red"
+
+        return false
+    }else {
+        document.getElementById("add_se_url").style.border = "1px solid #ccc"
+        document.getElementById("add_se_label").style.border = "1px solid #ccc"
+        document.getElementById("wrong_search_engine_warning").style.display = "none"
+        return true
+    }
+}
+document.getElementById("add_se_url").addEventListener("keyup", (e) => {
+    let url = e.target.value
+    let label = document.getElementById("add_se_label").value
+    check_se_values(url, label)    
+})
+document.getElementById("add_se_label").addEventListener("keyup", (e) => {
+    let label = e.target.value
+    let url = document.getElementById("add_se_url").value
+    check_se_values(url, label)    
+})
+
+document.getElementById("new_search_engine_button").addEventListener("click", () => {
+    let label = document.getElementById("add_se_label").value
+    let url = document.getElementById("add_se_url").value
+    if(check_se_values(url, label)){
+        chrome.storage.local.get("anchors", (result) => {
+            let anchors = result["anchors"] || {};
+            anchors[label] = url
+            chrome.storage.local.set({"anchors": anchors}, () => {
+                location.reload()
+            });
+        })
+    }
+})
+document.getElementById("closeSearchEngineModal").addEventListener("click", () => {
+    document.getElementById("searchEngineModal").style.display = "none";
+})
